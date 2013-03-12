@@ -11,3 +11,9 @@ project/plugins/project/
 
 # Scala-IDE specific
 .scala_dependencies
+
+
+.DS_Store
+.project
+.settings
+.classpath
