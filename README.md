@@ -22,3 +22,6 @@ Misc Scala
 - http://zeroturnaround.com/labs/scala-sink-or-swim-part-3/
 - http://www.infoq.com/articles/scala-java-myths-facts
 - http://www.artima.com/scalazine/articles/package_objects.html
+
+Misc Functional Programing
+- Functional Programming Pearls http://www.haskell.org/haskellwiki/Research_papers/Functional_pearls
