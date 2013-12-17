@@ -1,8 +1,8 @@
-package extractors
+package fun
 
 import java.math.BigInteger
 
-object PartialFun extends App {
+object ExtractFun extends App {
 
   def isPrime(x: Int) = BigInteger
     .valueOf(x)
@@ -18,11 +18,11 @@ object PartialFun extends App {
     def unapply(x: Int): Option[Int] =
       if (x % 2 == 0) Some(x)
       else None
-  }
+  }  
 
   (1 to 20) collect {
     case Prime(x) => s"$x is a prime"
     case Double(x) => s"$x is a double"
   } foreach println
-
+  
 }
