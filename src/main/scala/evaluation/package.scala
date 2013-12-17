@@ -1,3 +1,3 @@
 package object evaluation {
-  def answer:Int = {println("calculating..."); 42}
+  def answer: Int = { println("calculating..."); 42 }
 }

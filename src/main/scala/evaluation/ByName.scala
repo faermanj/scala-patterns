@@ -1,10 +1,10 @@
 package evaluation
 
-object ByName extends App{  
-  def pronounce(answer: => Int) = {
-	  println("The answer is "+answer+"!")
-	  println("The answer is "+answer+"!")
+object ByName extends App {
+  def pronounce(number: => Int) = {
+    println(s"The number is $number !")
+    println(s"The number is $number !")
   }
-  
-  pronounce (answer)
+
+  pronounce(answer)
 }
