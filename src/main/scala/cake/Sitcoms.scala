@@ -31,10 +31,10 @@ trait Sitcom {
 trait SimpleSitcom extends Sitcom {
   this: InterjectionComponent => /* this self type is required to be mixed-in */
 
-  def play = println(interjector.interjection + "!")
+  def play = println( s"${interjector.interjection}! Ahauhuauhahu!")
 }
 
-object Cake extends App {
+object Sitcoms extends App {
   val sony = new SimpleSitcom with BigBangTheory
   val fox = new SimpleSitcom with Simpsons
   sony.play
