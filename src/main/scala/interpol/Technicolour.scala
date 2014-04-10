@@ -9,10 +9,16 @@ object Colour extends Enumeration {
 }
 
 object Technicolour extends App {
+  val green = Colour.Green  
 
-  implicit class Transparent(val sc: StringContext) extends AnyVal {
+  println(colour"$green + Blue")
+  
+  println(colour"Blue with ${green} and Yellow vs. ${green} or Magenta")
+  
+  implicit class Colored(val sc: StringContext) extends AnyVal {
     //Interpolation magic below
     //Derived from http://www.monadzoo.com/blog/2013/01/06/scala-string-interpolation-it-happened/
+    
     def colour(args: Any*): Colour.Value = {
       //Mutable WITH Immutable
       val strings = sc.parts.iterator
@@ -24,7 +30,7 @@ object Technicolour extends App {
           buf ++= expressions.next.toString
       }
       val result = buf reduceLeft mix
-      println(s"[DEBUG] $buf = $result") // <= S Interpolator
+      //println(s"[DEBUG] $buf = $result") // <= S Interpolator
       result
     }
 
@@ -47,8 +53,4 @@ object Technicolour extends App {
         .map { _.get }
   }
 
-  val green = Colour.Green
-
-  println(colour"$green + Blue")
-  println(colour"Blue with ${green} and Yellow vs. ${green} or Magenta")
 }

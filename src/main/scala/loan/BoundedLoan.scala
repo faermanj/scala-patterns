@@ -11,8 +11,8 @@ object BoundedLoan extends App {
 
   val in = getClass.getResourceAsStream("loaned.txt")
   
-  withCloseable(in) { in =>
-    println(fromInputStream(in).mkString)
+  withCloseable(in) { c =>
+    println(fromInputStream(c).mkString)
   }
 
 }

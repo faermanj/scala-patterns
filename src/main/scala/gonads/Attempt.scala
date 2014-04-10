@@ -17,7 +17,7 @@ object Attempt extends App {
     }
   }
   
-  //Composition with map/flatMap
+  //Composition with flatMap
   def divideAndName1(num:Int,denom:Int):Try[String] = divide(num,denom) flatMap name
 
   //Composition with for comprehension

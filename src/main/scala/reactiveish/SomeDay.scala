@@ -12,9 +12,9 @@ object SomeDay extends App {
     println("Going to a nice conference will take a while!")
     read("http://qconsp.com")
   }
-
-  //See that futures start immediatly
+  println("The future has begun!")
   Thread.sleep(2000)
+  
   println("Let us check results")
   qconsp onSuccess {
     case site => println(s"Once: ${site.substring(0, 50)}")

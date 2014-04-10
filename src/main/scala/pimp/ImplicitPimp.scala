@@ -2,7 +2,7 @@ package pimp
 
 object ImplicitPimp extends App {
   
-  implicit class StringPimp(original: String) {
+  implicit class PimpedString(original: String) {
     def strong = s"<strong>$original</strong>"
     def em = s"<em>$original</em>"
   }
