@@ -21,7 +21,7 @@ object Optional extends App {
 
   println
   
-  val names = Map(1 -> "One", 2 -> "Two", 3 -> "Three") 
+  val names:Function[Int,String] = Map(1 -> "One", 2 -> "Two", 3 -> "Three") 
 
   List.fill(10)(optional)
     .flatMap { _ map { names(_) } } // Is "names" a Map, a method or a field? 

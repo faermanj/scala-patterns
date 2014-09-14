@@ -1,7 +1,7 @@
 package tailcall;
 
 public class BigStack {
-	static final Integer loop(Integer x)  {
+	static final Integer loop(int x)  {
 	    System.out.println(x);
 	    return loop(-1*x);
 	  }
