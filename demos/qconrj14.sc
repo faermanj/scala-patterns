@@ -139,26 +139,24 @@ object qconrj14 {
   
 	Future{ triploOuDemora(4) }.map(triplo).foreach(i => println(s"${i} @ ${now}"))
 	Future{ triploOuDemora(5) }.map(triplo).foreach(i => println(s"${i} @ ${now}"))
-                                                  //> 36 @ 18:13:30
-  Thread.sleep(3000)                              //> 15 @ 18:13:32
+                                                  //> 36 @ 18:15:30
+  Thread.sleep(3000)                              //> 15 @ 18:15:32
 	
 	//3.666. Lidando com M* :)
 	//	Xxxxx{ triploOuXxxx(0) }.map(triplo).foreach(println)
 	
 	import scala.util.Random._
-	val rands = Seq.fill(12){nextInt(100)}    //> rands  : Seq[Int] = List(76, 66, 22, 89, 91, 1, 70, 54, 42, 82, 99, 51)
+	val rands = Seq.fill(12){nextInt(100)}    //> rands  : Seq[Int] = List(89, 56, 4, 70, 75, 55, 6, 21, 39, 57, 17, 51)
 	for {
 		q <- rands
 		c <- Option { triploOuNada(q) }
 		o <- Try { triploOuFalha(c) }
 		n <- Future { triploOuDemora(o) }
-	} println(s"${n} @ ${now}" )              //> 2052 @ 18:13:33
+	} println(s"${n} @ ${now}" )              //> 1512 @ 18:15:33
+                                                  //| 108 @ 18:15:33
 
-	Thread.sleep(5000)                        //> 594 @ 18:13:35
-                                                  //| 738 @ 18:13:35
-                                                  //| 378 @ 18:13:35
-                                                  //| 198 @ 18:13:35
-                                                  //| 630 @ 18:13:35
-                                                  //| 486 @ 18:13:35-
-  // Codigo em http://...
+	Thread.sleep(5000)                        //> 
+                                                  //| 54 @ 18:15:35
+                                                  //| 630 @ 18:15:35-
+  // Codigo em http://bit.ly/scala20m
 }
