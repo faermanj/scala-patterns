@@ -1,7 +1,7 @@
 
 
 object qconrj14 {
-  println("Bem vindos à Scala")                   //> Bem vindos à Scala
+  println("Scala em 20m no QCON Rio")             //> Scala em 20m no QCON Rio
 
   //1. Seja menos prolixo
   class Pessoa(nome: String) { //<- Isso e um contstrutor
@@ -141,31 +141,27 @@ object qconrj14 {
   
 	Future{ triploOuDemora(4) }.map(triplo).foreach(i => println(s"${i} @ ${now}"))
 	Future{ triploOuDemora(5) }.map(triplo).foreach(i => println(s"${i} @ ${now}"))
-                                                  //> 36 @ 18:10:32
-  Thread.sleep(3000)                              //> 15 @ 18:10:34
+                                                  //> 36 @ 18:12:15
+  Thread.sleep(3000)                              //> 15 @ 18:12:17
 	
 	//3.666. Lidando com M* :)
 	//	Xxxxx{ triploOuXxxx(0) }.map(triplo).foreach(println)
 	
 	
 	import scala.util.Random._
-	val rands = Seq.fill(12){nextInt(100)}    //> rands  : Seq[Int] = List(28, 86, 48, 8, 41, 16, 20, 17, 36, 48, 92, 50)
+	val rands = Seq.fill(12){nextInt(100)}    //> rands  : Seq[Int] = List(24, 20, 45, 62, 99, 59, 11, 38, 58, 92, 91, 75)
 	for {
 		q <- rands
 		c <- Option { triploOuNada(q) }
 		o <- Try { triploOuFalha(c) }
 		n <- Future { triploOuDemora(o) }
-	} println(s"${n} @ ${now}" )              //> 756 @ 18:10:35
-                                                  //| 1296 @ 18:10:35
-                                                  //| 216 @ 18:10:35
-                                                  //| 432 @ 18:10:35
-                                                  //| 540 @ 18:10:35
+	} println(s"${n} @ ${now}" )              //> 648 @ 18:12:18
+                                                  //| 540 @ 18:12:18
 
-	Thread.sleep(5000)                        //> 972 @ 18:10:35
-                                                  //| 2484 @ 18:10:35
-                                                  //| 1296 @ 18:10:35
-                                                  //| 774 @ 18:10:37
-                                                  //| 450 @ 18:10:37-
+	Thread.sleep(5000)                        //> 2484 @ 18:12:18
+                                                  //| 558 @ 18:12:20
+                                                  //| 342 @ 18:12:20
+                                                  //| 522 @ 18:12:20-
 
   // Codigo em http://...
 }
