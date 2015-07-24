@@ -13,7 +13,7 @@ object TickTock extends App {
   val sub = ticks
     .map { _ * freq }
     .filter { _ % 1000 == 0 }
-    .buffer(3,2)
+    //.buffer(3,2)
     .subscribe { tick => println(f"${new Date}%tT ${tick}%s") }
 
   Thread.sleep(20 * freq)

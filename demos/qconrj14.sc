@@ -16,14 +16,14 @@ object qconrj14 {
   }
 
   //1.1 Inferencia de tipos
-  val fulano = new Pessoa("Fulano")               //> fulano  : qconrj14.Pessoa = qconrj14$$anonfun$main$1$Pessoa$1@3498ed
+  val fulano = new Pessoa("Fulano")               //> fulano  : qconrj14.Pessoa = qconrj14$$anonfun$main$1$Pessoa$1@b684286
   fulano.digaOi                                   //> oi Fulano!
 
   //1.2 Princípio do acesso uniforme
   println(fulano.saudacao)                        //> oi Fulano!
 
   //1.3 Mutabilidade explicita
-  var ciclano = new Pessoa("Ciclano")             //> ciclano  : qconrj14.Pessoa = qconrj14$$anonfun$main$1$Pessoa$1@180bc464
+  var ciclano = new Pessoa("Ciclano")             //> ciclano  : qconrj14.Pessoa = qconrj14$$anonfun$main$1$Pessoa$1@4411d970
   ciclano = fulano
   //fulano = ciclano
 
@@ -59,7 +59,7 @@ object qconrj14 {
   //2.2 As "palavras chave" te entendem também
   val nodeList:NodeList = doc.getElementsByTagName("div")
                                                   //> nodeList  : org.w3c.dom.NodeList = com.sun.org.apache.xerces.internal.dom.D
-                                                  //| eepNodeListImpl@1324409e
+                                                  //| eepNodeListImpl@6442b0a6
   
   implicit class TraversableNodeList(nl: NodeList) extends Traversable[Node] {
     override def foreach[U](f: Node => U): Unit =
@@ -70,6 +70,7 @@ object qconrj14 {
                                                   //> um
                                                   //| dois
                                                   //| tres
+                                                  //| res0: <error> = ()
 
   //3. É funcional, mas e dai?
 
@@ -79,6 +80,7 @@ object qconrj14 {
     .filter { _.length > 3 }
     .foreach { println }                          //> dois
                                                   //| tres
+                                                  //| res1: <error> = ()
 
   //3.2 Funções como argumentos e retornos
   implicit class InputExtreme(in: InputStream) {
@@ -94,7 +96,7 @@ object qconrj14 {
     .replaceAll("<", "[")
     .replaceAll(">", "]")                         //> destagueia: (in: java.io.InputStream)String
 
-  data.aplica(destagueia)                         //> res0: String = "
+  data.aplica(destagueia)                         //> res2: <error> = "
                                                   //|   	[html]
                                                   //|   			[div]um[/div]
                                                   //|   			[div]dois[/div]
@@ -139,28 +141,27 @@ object qconrj14 {
   
 	Future{ triploOuDemora(4) }.map(triplo).foreach(i => println(s"${i} @ ${now}"))
 	Future{ triploOuDemora(5) }.map(triplo).foreach(i => println(s"${i} @ ${now}"))
-                                                  //> 36 @ 13:05:42
-  Thread.sleep(3000)                              //> 15 @ 13:05:44
+                                                  //> 36 @ 18:37:03
+  Thread.sleep(3000)                              //> 15 @ 18:37:05
 	
 	//3.666. Lidando com M* :)
 	//	Xxxxx{ triploOuXxxx(0) }.map(triplo).foreach(println)
 	
 	import scala.util.Random._
-	val rands = Seq.fill(12){nextInt(100)}    //> rands  : Seq[Int] = List(98, 42, 55, 24, 71, 16, 6, 53, 52, 5, 98, 80)
+	val rands = Seq.fill(12){nextInt(100)}    //> rands  : Seq[Int] = List(16, 23, 79, 36, 62, 59, 38, 78, 45, 46, 8, 90)
 	for {
 		q <- rands
 		c <- Option { triploOuNada(q) }
 		o <- Try { triploOuFalha(c) }
 		n <- Future { triploOuDemora(o) }
-	} println(s"${n} @ ${now}" )
+	} println(s"${n} @ ${now}" )              //> 432 @ 18:37:06
+                                                  //| 972 @ 18:37:06
 
-	Thread.sleep(5000)                        //> 648 @ 13:05:45
-                                                  //| 432 @ 13:05:45
-                                                  //| 1404 @ 13:05:45
-                                                  //| 2160 @ 13:05:45
-                                                  //| 882 @ 13:05:47
-                                                  //| 378 @ 13:05:47
-                                                  //| 54 @ 13:05:47
-                                                  //| 882 @ 13:05:47-
+	Thread.sleep(5000)                        //> 216 @ 18:37:06
+                                                  //| 342 @ 18:37:08
+                                                  //| 702 @ 18:37:08
+                                                  //| 810 @ 18:37:08
+                                                  //| 414 @ 18:37:08
+                                                  //| 558 @ 18:37:08|
   // Codigo em http://bit.ly/scala20m
 }
