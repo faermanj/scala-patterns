@@ -146,8 +146,8 @@ object ScalaEm10m {
   
 	Future{ triploOuDemora(4) }.map(triplo).foreach(i => println(s"${i} @ ${now}"))
 	Future{ triploOuDemora(5) }.map(triplo).foreach(i => println(s"${i} @ ${now}"))
-                                                  //> 36 @ 10:56:46
-  Thread.sleep(3000)                              //> 15 @ 10:56:48
+                                                  //> 36 @ 10:58:12
+  Thread.sleep(3000)                              //> 15 @ 10:58:14
 	
 	//  Alguma semelhanca?
 	Option { triploOuNada(1)   }.map(triplo).foreach(println)
@@ -155,18 +155,20 @@ object ScalaEm10m {
 	Future { triploOuDemora(1) }.map(triplo).foreach(println)
 	 
 	import scala.util.Random._
-	val rands = Seq.fill(12){nextInt(100)}    //> rands  : Seq[Int] = List(87, 92, 13, 65, 19, 18, 49, 96, 27, 81, 3, 50)
+	val rands = Seq.fill(12){nextInt(100)}    //> rands  : Seq[Int] = List(85, 9, 83, 34, 30, 38, 71, 33, 86, 38, 43, 23)
 	for {
 		q <- rands
 		c <- Option { triploOuNada(q) }
 		o <- Try { triploOuFalha(c) }
 		n <- Future { triploOuDemora(o) }
-	} println(s"${n} @ ${now}" )              //> 2484 @ 10:56:49
+	} println(s"${n} @ ${now}" )
 
-	Thread.sleep(5000)                        //> 2592 @ 10:56:49
-                                                  //| 3
-                                                  //| 162 @ 10:56:51
-                                                  //| 450 @ 10:56:51/
+	Thread.sleep(5000)                        //> 3
+                                                  //| 342 @ 10:58:17
+                                                  //| 306 @ 10:58:17
+                                                  //| 270 @ 10:58:17
+                                                  //| 774 @ 10:58:19
+                                                  //| 342 @ 10:58:19
 }
 // Obrigado! Perguntas?
 // Codigo em http://bit.ly/scalaem10m
