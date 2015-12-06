@@ -11,13 +11,15 @@ import java.io.InputStream
 *  2 Reuso e Melhoria
 *  3 Programação Funcional
 * - E dai?
+*
+* Codigo em http://bit.ly/scalaem10m
 **/
 object ScalaEm10m {
   println("Scala em 10m no Speakers Weekend")     //> Scala em 10m no Speakers Weekend
 
-  //1. Linguagem enxuta
+  //1. Linguagem Enxuta
   
-  class Pessoa(nome: String) { //<- Isso e um contstrutor
+  class Pessoa(nome: String) { //<- Isso e um contstrutor e um campo
     /*public*/ def saudacao /*():String throws Exception*/ =
       //{
       //var result:String
@@ -29,12 +31,11 @@ object ScalaEm10m {
     //}
   }
 
-
   //Inferencia de tipos
   val fulano = new Pessoa("Fulano")               //> fulano  : ScalaEm10m.Pessoa = ScalaEm10m$$anonfun$main$1$Pessoa$1@7f63425a
 	println(fulano.saudacao)                  //> oi Fulano!
 
-  //2. Melhore APIs existentes e o codigo legado
+  //2. Reuso e Melhoria
   implicit class StringMelhor(str: String) {
     def tagueie(tag: String) = s"<$tag>$str</$tag>"
     def enfatize = tagueie("em")
@@ -42,7 +43,7 @@ object ScalaEm10m {
 
   println("Uau!!!".enfatize)                      //> <em>Uau!!!</em>
 
-  //2.1 "Compativel" com bibliotecas Java
+  //"Compativel" com bibliotecas Java
   import javax.xml.parsers._
   import org.w3c.dom._
   import java.io._
@@ -55,13 +56,14 @@ object ScalaEm10m {
   			<div>tres</div>
   	</html>
   	""".getBytes)                             //> data: => java.io.ByteArrayInputStream
+  
   val doc = DocumentBuilderFactory
   	.newInstance
   	.newDocumentBuilder
   	.parse(data)                              //> doc  : org.w3c.dom.Document = [#document: null]
   	  
 
-  //2.2 As "palavras chave" te entendem também
+  //As "palavras chave" te entendem também
   val nodeList:NodeList = doc.getElementsByTagName("div")
                                                   //> nodeList  : org.w3c.dom.NodeList = com.sun.org.apache.xerces.internal.dom.D
                                                   //| eepNodeListImpl@2d6e8792
@@ -76,16 +78,16 @@ object ScalaEm10m {
                                                   //| dois
                                                   //| tres
 
-  //3. É funcional, mas e dai?
+  //3. Programacao Funcional
 
-  //3.1 Collections e Closures
+  //Collections e Closures
   nodeList
     .map { _.getTextContent }
     .filter { _.length > 3 }
     .foreach { println }                          //> dois
                                                   //| tres
 
-  //3.2 Funções como argumentos e retornos
+  //Funcoes como argumentos e retornos
   implicit class InputExtreme(in: InputStream) {
     def aplica[T](f: InputStream => T): T =
       try f(in)
@@ -107,7 +109,7 @@ object ScalaEm10m {
                                                   //|   	[/html]
                                                   //|   	"
 
-  //3.3 Lidando com null
+  //Lidando com null
   def triplo(i: Integer) = i * 3                  //> triplo: (i: Integer)Int
   def triploOuNada(i: Int): Integer = if (i % 2 == 0) triplo(i) else null
                                                   //> triploOuNada: (i: Int)Integer
@@ -143,29 +145,38 @@ object ScalaEm10m {
   def now = sdf.format(new Date)                  //> now: => String
   
 	Future{ triploOuDemora(4) }.map(triplo).foreach(i => println(s"${i} @ ${now}"))
-                                                  //> 36 @ 10:38:47
 	Future{ triploOuDemora(5) }.map(triplo).foreach(i => println(s"${i} @ ${now}"))
-  Thread.sleep(3000)                              //> 15 @ 10:38:49
+                                                  //> 36 @ 10:56:46
+  Thread.sleep(3000)                              //> 15 @ 10:56:48
 	
-	//3.666. Lidando com M* :)
-	//	Xxxxx{ triploOuXxxx(0) }.map(triplo).foreach(println)
-	
+	//  Alguma semelhanca?
+	Option { triploOuNada(1)   }.map(triplo).foreach(println)
+	Try    { triploOuFalha(1)  }.map(triplo).foreach(println)
+	Future { triploOuDemora(1) }.map(triplo).foreach(println)
+
+	// Tudo ao mesmo tempo
+	Option { triploOuNada(1) }
+		.map { Try(_) }
+		.map { Future(_) }                //> res1: Option[scala.concurrent.Future[scala.util.Try[Integer]]] = None
+	 
 	import scala.util.Random._
-	val rands = Seq.fill(12){nextInt(100)}    //> rands  : Seq[Int] = List(61, 60, 70, 69, 25, 82, 81, 95, 20, 68, 47, 71)
+	val rands = Seq.fill(12){nextInt(100)}    //> rands  : Seq[Int] = List(87, 92, 13, 65, 19, 18, 49, 96, 27, 81, 3, 50)
 	for {
 		q <- rands
 		c <- Option { triploOuNada(q) }
 		o <- Try { triploOuFalha(c) }
 		n <- Future { triploOuDemora(o) }
-	} println(s"${n} @ ${now}" )              //> 1620 @ 10:38:50
+	} println(s"${n} @ ${now}" )              //> 2484 @ 10:56:49
 
-	Thread.sleep(5000)                        //> 1836 @ 10:38:50
-                                                  //| 540 @ 10:38:50
-                                                  //| 630 @ 10:38:52
-                                                  //| 738 @ 10:38:52/
-  // Codigo em http://bit.ly/scala20m
+	Thread.sleep(5000)                        //> 2592 @ 10:56:49
+                                                  //| 3
+                                                  //| 162 @ 10:56:51
+                                                  //| 450 @ 10:56:51/
 }
-
+// Obrigado! Perguntas?
+// Codigo em http://bit.ly/scalaem10m
+//
+// Julio M. Faerman - @jmfaerman
 //   ___________________
 //  < Conheça a Eduvem  >
 //  < http://eduvem.com >
@@ -176,4 +187,3 @@ object ScalaEm10m {
 //                  ||----w |
 //                  ||     ||
 //
-// Julio M. Faerman - @jmfaerman
