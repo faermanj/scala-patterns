@@ -153,11 +153,6 @@ object ScalaEm10m {
 	Option { triploOuNada(1)   }.map(triplo).foreach(println)
 	Try    { triploOuFalha(1)  }.map(triplo).foreach(println)
 	Future { triploOuDemora(1) }.map(triplo).foreach(println)
-
-	// Tudo ao mesmo tempo
-	Option { triploOuNada(1) }
-		.map { Try(_) }
-		.map { Future(_) }                //> res1: Option[scala.concurrent.Future[scala.util.Try[Integer]]] = None
 	 
 	import scala.util.Random._
 	val rands = Seq.fill(12){nextInt(100)}    //> rands  : Seq[Int] = List(87, 92, 13, 65, 19, 18, 49, 96, 27, 81, 3, 50)

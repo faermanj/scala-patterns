@@ -135,14 +135,9 @@ object ScalaEm10m {;import org.scalaide.worksheet.runtime.library.WorksheetSuppo
 	//  Alguma semelhanca?
 	Option { triploOuNada(1)   }.map(triplo).foreach(println);$skip(59); 
 	Try    { triploOuFalha(1)  }.map(triplo).foreach(println);$skip(59); 
-	Future { triploOuDemora(1) }.map(triplo).foreach(println);$skip(92); val res$1 = 
-
-	// Tudo ao mesmo tempo
-	Option { triploOuNada(1) }
-		.map { Try(_) }
-		.map { Future(_) }
+	Future { triploOuDemora(1) }.map(triplo).foreach(println)
 	 
-	import scala.util.Random._;System.out.println("""res1: Option[scala.concurrent.Future[scala.util.Try[Integer]]] = """ + $show(res$1));$skip(71); 
+	import scala.util.Random._;$skip(71); 
 	val rands = Seq.fill(12){nextInt(100)};System.out.println("""rands  : Seq[Int] = """ + $show(rands ));$skip(152); 
 	for {
 		q <- rands
