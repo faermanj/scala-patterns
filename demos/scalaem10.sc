@@ -1,25 +1,37 @@
-import org.w3c.dom.NodeList
-import java.io.InputStream
-
 /**
+*     Scala em 10m
+*
 *		Julio M. Faerman
 *   	@jmfaerman
 *
 * - Por que aprender Scala?
-* - Três funcionalidades chave
-*  1 Linguagem Enxuta
-*  2 Reuso e Melhoria
-*  3 Programação Funcional
-* - E dai?
+* - Três melhorias ao Java
+*  1- Linguagem Enxuta
+*  2- Reuso e Melhoria de APIs
+*  3- Programação Funcional
 *
 * Codigo em http://bit.ly/scalaem10m
 **/
+
+import java.text._
+import java.util._
+import javax.xml.parsers._
+import org.w3c.dom._
+import java.io._
+
 object ScalaEm10m {
-  println("Scala em 10m no Speakers Weekend")     //> Scala em 10m no Speakers Weekend
+  println("Scala em 10m")                         //> Scala em 10m
 
   //1. Linguagem Enxuta
   
-  class Pessoa(nome: String) { //<- Isso e um contstrutor e um campo
+  class Pessoa(nome: String) {
+  	/*
+  		var nome
+  	  def this(nome:String) = {
+  			this.nome = nome
+  		}
+  	*/
+  	
     /*public*/ def saudacao /*():String throws Exception*/ =
       //{
       //var result:String
@@ -36,38 +48,33 @@ object ScalaEm10m {
 	println(fulano.saudacao)                  //> oi Fulano!
 
   //2. Reuso e Melhoria
+  
+  // Melhorando a classe String
   implicit class StringMelhor(str: String) {
-    def tagueie(tag: String) = s"<$tag>$str</$tag>"
-    def enfatize = tagueie("em")
+    def enfatize = s"<em>$str</em>"
   }
 
   println("Uau!!!".enfatize)                      //> <em>Uau!!!</em>
 
-  //"Compativel" com bibliotecas Java
-  import javax.xml.parsers._
-  import org.w3c.dom._
-  import java.io._
-
-  def data = new ByteArrayInputStream(
-    """
+  // NodeList vs List<Node>?
+  def xhtml = """
   	<html>
   			<div>um</div>
   			<div>dois</div>
   			<div>tres</div>
   	</html>
-  	""".getBytes)                             //> data: => java.io.ByteArrayInputStream
-  
+  	"""                                       //> xhtml: => String
+  	
   val doc = DocumentBuilderFactory
   	.newInstance
   	.newDocumentBuilder
-  	.parse(data)                              //> doc  : org.w3c.dom.Document = [#document: null]
-  	  
+  	.parse(new ByteArrayInputStream(xhtml.getBytes))
+                                                  //> doc  : org.w3c.dom.Document = [#document: null]
 
-  //As "palavras chave" te entendem também
   val nodeList:NodeList = doc.getElementsByTagName("div")
                                                   //> nodeList  : org.w3c.dom.NodeList = com.sun.org.apache.xerces.internal.dom.D
                                                   //| eepNodeListImpl@2d6e8792
-  
+
   implicit class TraversableNodeList(nl: NodeList) extends Traversable[Node] {
     override def foreach[U](f: Node => U): Unit =
       for (i <- 0 until nl.getLength) f(nl.item(i))
@@ -86,89 +93,63 @@ object ScalaEm10m {
     .filter { _.length > 3 }
     .foreach { println }                          //> dois
                                                   //| tres
+	val sdf = new SimpleDateFormat("HH:mm:ss")//> sdf  : java.text.SimpleDateFormat = java.text.SimpleDateFormat@8140d380
+  def now = sdf.format(new Date)                  //> now: => String
+  def imprime(s:Any) = println(s"${s} @ ${now}")  //> imprime: (s: Any)Unit
+  
+  def treta(i: Integer) =
+  	if (i == 2)
+  		null
+  	else if (i == 3)
+  		throw new Exception()
+  	else if (i == 4) {
+  		Thread.sleep(2000)
+  		i
+  	} else i                                  //> treta: (i: Integer)Integer
+  
+  // Lidando com null
+	val o1 = Option{ treta(1) }               //> o1  : Option[Integer] = Some(1)
+	val o2 = Option{ treta(2) }               //> o2  : Option[Integer] = None
+	
+  o1.map(_ * 2).foreach(imprime)                  //> 2 @ 20:11:50
+  o2.map(_ * 2).foreach(imprime)
 
-  //Funcoes como argumentos e retornos
-  implicit class InputExtreme(in: InputStream) {
-    def aplica[T](f: InputStream => T): T =
-      try f(in)
-      finally in.close
-  }
-
-  import scala.io.Source
-  def destagueia(in: InputStream) = Source
-    .fromInputStream(in)
-    .mkString
-    .replaceAll("<", "[")
-    .replaceAll(">", "]")                         //> destagueia: (in: java.io.InputStream)String
-
-  data.aplica(destagueia)                         //> res0: String = "
-                                                  //|   	[html]
-                                                  //|   			[div]um[/div]
-                                                  //|   			[div]dois[/div]
-                                                  //|   			[div]tres[/div]
-                                                  //|   	[/html]
-                                                  //|   	"
-
-  //Lidando com null
-  def triplo(i: Integer) = i * 3                  //> triplo: (i: Integer)Int
-  def triploOuNada(i: Int): Integer = if (i % 2 == 0) triplo(i) else null
-                                                  //> triploOuNada: (i: Int)Integer
-
-  Option{ triploOuNada(2) }.map(triplo).foreach(println)
-                                                  //> 18
-  Option{ triploOuNada(3) }.map(triplo).foreach(println)
-
-  //3.4 Lidando com falha
+  // Lidando com falha
   import scala.util.Try
 
-  def triploOuFalha(i: Integer): Integer = if (i % 3 == 0) triplo(i) else throw new Exception("Ops")
-                                                  //> triploOuFalha: (i: Integer)Integer
-  Try{ triploOuFalha(3) }.map(triplo).foreach(println)
-                                                  //> 27
-  Try{ triploOuFalha(4) }.map(triplo).foreach(println)
+  Try{ treta(1) }.map(_ * 2).foreach(imprime)     //> 2 @ 20:11:50
+  Try{ treta(3) }.map(_ * 2).foreach(imprime)
 
-  //3.5 Lidando com latencia
+  // Lidando com latencia
   import scala.concurrent._
   import scala.concurrent.ExecutionContext.Implicits.global
-  
-  def triploOuDemora(i: Integer): Integer = if (i % 4 == 0)
-    triplo(i)
-  else {
-    Thread.sleep(2000)
-    i
-  }                                               //> triploOuDemora: (i: Integer)Integer
-  
-  import java.text.SimpleDateFormat
-  import java.util.Date
-  
-  val sdf = new SimpleDateFormat("HH:mm:ss")      //> sdf  : java.text.SimpleDateFormat = java.text.SimpleDateFormat@8140d380
-  def now = sdf.format(new Date)                  //> now: => String
-  
-	Future{ triploOuDemora(4) }.map(triplo).foreach(i => println(s"${i} @ ${now}"))
-	Future{ triploOuDemora(5) }.map(triplo).foreach(i => println(s"${i} @ ${now}"))
-                                                  //> 36 @ 10:58:12
-  Thread.sleep(3000)                              //> 15 @ 10:58:14
-	
-	//  Alguma semelhanca?
-	Option { triploOuNada(1)   }.map(triplo).foreach(println)
-	Try    { triploOuFalha(1)  }.map(triplo).foreach(println)
-	Future { triploOuDemora(1) }.map(triplo).foreach(println)
-	 
-	import scala.util.Random._
-	val rands = Seq.fill(12){nextInt(100)}    //> rands  : Seq[Int] = List(85, 9, 83, 34, 30, 38, 71, 33, 86, 38, 43, 23)
-	for {
-		q <- rands
-		c <- Option { triploOuNada(q) }
-		o <- Try { triploOuFalha(c) }
-		n <- Future { triploOuDemora(o) }
-	} println(s"${n} @ ${now}" )
+    
+	Future{ treta(1) }.map(_ * 2).foreach(imprime)
+	Future{ treta(4) }.map(_ * 2).foreach(imprime)
+                                                  //> 2 @ 20:11:50
 
-	Thread.sleep(5000)                        //> 3
-                                                  //| 342 @ 10:58:17
-                                                  //| 306 @ 10:58:17
-                                                  //| 270 @ 10:58:17
-                                                  //| 774 @ 10:58:19
-                                                  //| 342 @ 10:58:19
+  Thread.sleep(5000)                              //> 8 @ 20:11:52
+  
+	//  Alguma semelhanca?
+	Option { treta(2)  }.map(_ * 2).foreach(imprime)
+	Try    { treta(3)  }.map(_ * 2).foreach(imprime)
+	Future { treta(4)  }.map(_ * 2).foreach(imprime)
+	
+	Thread.sleep(3000)                        //> 8 @ 20:11:57
+	
+	 
+	def rand = new Random().nextInt(3)+1      //> rand: => Int
+	
+	val itof = Future(Option(Try(treta(rand))))
+                                                  //> itof  : scala.concurrent.Future[Option[scala.util.Try[Integer]]] = scala.co
+                                                  //| ncurrent.impl.Promise$DefaultPromise@29ca901e
+
+	for (ito <- itof;
+			 it <- ito;
+			 i <- it)
+		imprime(i)
+
+	Thread.sleep(5000)                        //> 1 @ 20:11:58-
 }
 // Obrigado! Perguntas?
 // Codigo em http://bit.ly/scalaem10m
