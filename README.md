@@ -2,9 +2,9 @@ Some examples of design patterns for Scala programming
 
 References:
 
-Patterns in Scala 101:
+Patterns in Scala 101
 - https://code.sahebmotiani.com/patterns-in-scala-101-5d0fa70aaf3f#.p6x1krijb
-- 
+
 Loan Pattern
 - https://wiki.scala-lang.org/display/SYGN/Loan
 	
