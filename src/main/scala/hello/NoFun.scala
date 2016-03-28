@@ -1,6 +1,8 @@
 package hello
 
-object NoFun extends App{    
+object NoFun 
+  extends App{    
    o ▽ o 
     ____
 }
+
