@@ -5,6 +5,7 @@ import rx.lang.scala.schedulers._
 import scala.concurrent.duration._
 import scala.concurrent.Await
 import java.util.Date
+import scala.language.postfixOps
 
 object TickTock extends App {
   val freq = 500

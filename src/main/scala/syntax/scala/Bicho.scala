@@ -1,4 +1,5 @@
 package syntax.scala
+import scala.language.postfixOps
 
 object Bicho extends App{
 

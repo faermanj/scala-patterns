@@ -66,7 +66,7 @@ object ScalaEm10 extends App {
   val nodeList:NodeList = doc.getElementsByTagName("div")
                                                   //> nodeList  : org.w3c.dom.NodeList = com.sun.org.apache.xerces.internal.dom.D
                                                   //| eepNodeListImpl@6442b0a6
-  
+  /*
   implicit class TraversableNodeList(nl: NodeList) extends Traversable[Node] {
     override def foreach[U](f: Node => U): Unit =
       for (i <- 0 until nl.getLength) f(nl.item(i))
@@ -77,17 +77,19 @@ object ScalaEm10 extends App {
                                                   //| dois
                                                   //| tres
                                                   //| res0: <error> = ()
+  */
 
   //// 3. É funcional, mas e dai?
 
   //3.1 Collections e Closures
+  /*
   nodeList
     .map { _.getTextContent }
     .filter { _.length > 3 }
     .foreach { println }                          //> dois
                                                   //| tres
                                                   //| res1: <error> = ()
-
+  */
   //3.2 Funções como argumentos e retornos
   implicit class InputExtreme(in: InputStream) {
     def aplica[T](f: InputStream => T): T =
